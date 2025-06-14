@@ -171,7 +171,7 @@ function Sidebar({
 					data-sidebar="sidebar"
 					data-slot="sidebar"
 					data-mobile="true"
-					className="bg-black-200 text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+					className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
 					style={
 						{
 							"--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -228,7 +228,7 @@ function Sidebar({
 				<div
 					data-sidebar="sidebar"
 					data-slot="sidebar-inner"
-					className="bg-black-400 group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+					className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
 				>
 					{children}
 				</div>
@@ -246,7 +246,10 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 			data-slot="sidebar-trigger"
 			variant="ghost"
 			size="icon"
-			className={cn("size-7", className)}
+			className={cn(
+				"size-7 cursor-pointer text-wisteria-500 hover:text-accent-foreground hover:bg-wisteria-500",
+				className
+			)}
 			onClick={(event) => {
 				onClick?.(event);
 				toggleSidebar();
@@ -438,7 +441,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 		<li
 			data-slot="sidebar-menu-item"
 			data-sidebar="menu-item"
-			className={cn("group/menu-item relative", className)}
+			className={cn("group/menu-item relative cursor-pointer", className)}
 			{...props}
 		/>
 	);
