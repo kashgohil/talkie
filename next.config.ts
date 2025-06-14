@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 		return [
 			{
 				source: "/chat/:chatID",
-				destination: "/?chatID=:chatID",
+				destination: "/chat?id=:chatID",
 			},
 		];
 	},
