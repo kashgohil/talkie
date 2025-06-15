@@ -1,75 +1,13 @@
-"use client";
-
-import { BookOpen, Bot, Flower, Frame, LifeBuoy, Map, PieChart, Send, Settings2, SquareTerminal } from "lucide-react";
+import { Flower } from "lucide-react";
 import * as React from "react";
 
-import { NavHistory } from "@/components/nav-main";
+import { NavHistory } from "@/components/nav-history";
 import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
 
-const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
-	navMain: [
-		{
-			title: "Playground",
-			url: "#",
-			icon: SquareTerminal,
-			isActive: true,
-		},
-		{
-			title: "Models",
-			url: "#",
-			icon: Bot,
-		},
-		{
-			title: "Documentation",
-			url: "#",
-			icon: BookOpen,
-		},
-		{
-			title: "Settings",
-			url: "#",
-			icon: Settings2,
-		},
-	],
-	navSecondary: [
-		{
-			title: "Support",
-			url: "#",
-			icon: LifeBuoy,
-		},
-		{
-			title: "Feedback",
-			url: "#",
-			icon: Send,
-		},
-	],
-	projects: [
-		{
-			name: "Design Engineering",
-			url: "#",
-			icon: Frame,
-		},
-		{
-			name: "Sales & Marketing",
-			url: "#",
-			icon: PieChart,
-		},
-		{
-			name: "Travel",
-			url: "#",
-			icon: Map,
-		},
-	],
-};
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	return (
 		<Sidebar
 			variant="inset"
@@ -92,13 +30,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				<NavProjects projects={data.projects} />
+				<NavProjects />
 				<NavHistory />
-				<NavSecondary
-					items={data.navSecondary}
-					className="mt-auto"
-				/>
-				<NavUser user={data.user} />
+				<NavSecondary className="mt-auto" />
+				<NavUser />
 			</SidebarContent>
 		</Sidebar>
 	);
