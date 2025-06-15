@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,18 +13,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
-export function NavUser({
-	user,
-}: {
-	user: {
-		name: string;
-		email: string;
-		avatar: string;
-	};
-}) {
-	const { isMobile } = useSidebar();
+export function NavUser() {
+	const { user } = useUser();
+
+	if (!user) {
+		return null;
+	}
 
 	return (
 		<SidebarMenu>
@@ -36,21 +33,23 @@ export function NavUser({
 						>
 							<Avatar className="h-8 w-8 rounded-lg">
 								<AvatarImage
-									src={user.avatar}
-									alt={user.name}
+									src={user.imageUrl}
+									alt={user.fullName || ""}
 								/>
-								<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+								<AvatarFallback className="rounded-lg">
+									{user.firstName?.[0]}
+									{user.lastName?.[0]}
+								</AvatarFallback>
 							</Avatar>
 							<div className="grid flex-1 text-left text-sm leading-tight">
-								<span className="truncate font-medium">{user.name}</span>
-								<span className="truncate text-xs">{user.email}</span>
+								<span className="truncate font-medium">{user.fullName}</span>
 							</div>
 							<ChevronsUpDown className="ml-auto size-4" />
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent
 						className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-						side={isMobile ? "bottom" : "right"}
+						side="bottom"
 						align="end"
 						sideOffset={4}
 					>
@@ -58,42 +57,45 @@ export function NavUser({
 							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 								<Avatar className="h-8 w-8 rounded-lg">
 									<AvatarImage
-										src={user.avatar}
-										alt={user.name}
+										src={user.imageUrl}
+										alt={user.fullName || ""}
 									/>
-									<AvatarFallback className="rounded-lg">CN</AvatarFallback>
+									<AvatarFallback className="rounded-lg">
+										{user.firstName?.[0]}
+										{user.lastName?.[0]}
+									</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-medium">{user.name}</span>
-									<span className="truncate text-xs">{user.email}</span>
+									<span className="truncate font-medium">{user.fullName}</span>
+									<span className="truncate text-xs">{user.primaryEmailAddress?.emailAddress}</span>
 								</div>
 							</div>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
 							<DropdownMenuItem className="group/menu-item">
-								<Sparkles className="text-accent group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
+								<Sparkles className="text-wisteria-700 group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
 								Upgrade to Pro
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuGroup>
 							<DropdownMenuItem className="group/menu-item">
-								<BadgeCheck className="text-accent group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
+								<BadgeCheck className="text-wisteria-700 group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
 								Account
 							</DropdownMenuItem>
 							<DropdownMenuItem className="group/menu-item">
-								<CreditCard className="text-accent group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
+								<CreditCard className="text-wisteria-700 group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
 								Billing
 							</DropdownMenuItem>
 							<DropdownMenuItem className="group/menu-item">
-								<Bell className="text-accent group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
+								<Bell className="text-wisteria-700 group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
 								Notifications
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem className="group/menu-item">
-							<LogOut className="text-accent group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
+							<LogOut className="text-wisteria-700 group-hover/menu-item:text-accent-foreground group-focus/menu-item:text-accent-foreground" />
 							Log out
 						</DropdownMenuItem>
 					</DropdownMenuContent>
