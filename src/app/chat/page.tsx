@@ -1,10 +1,9 @@
+import { ModeSelector } from "@/components/mode-selector";
+import { ModelSelector } from "@/components/model-selector";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Flower, Paperclip } from "lucide-react";
-import { models, modes } from "../constants";
 
 export default function Home() {
 	return (
@@ -21,37 +20,8 @@ export default function Home() {
 					/>
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-2">
-							<Select defaultValue="gpt-4o">
-								<SelectTrigger className="bg-accent text-black-200 border-none">
-									<SelectValue placeholder="Select a model" />
-								</SelectTrigger>
-								<SelectContent
-									className="w-50"
-									align="center"
-								>
-									{models.map((model) => (
-										<SelectItem
-											key={model.id}
-											value={model.id}
-										>
-											{model.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<ToggleGroup
-								type="single"
-								variant="outline"
-							>
-								{modes.map((mode) => (
-									<ToggleGroupItem
-										key={mode.id}
-										value={mode.id}
-									>
-										{mode.name}
-									</ToggleGroupItem>
-								))}
-							</ToggleGroup>
+							<ModelSelector />
+							<ModeSelector />
 						</div>
 
 						<div className="flex items-center gap-2">
