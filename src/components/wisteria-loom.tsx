@@ -1,5 +1,7 @@
-export function WisteriaLoom(props: { className?: string }) {
-	const { className } = props;
+import { CSSProperties } from "react";
+
+export function WisteriaLoom(props: { className?: string; style?: CSSProperties }) {
+	const { className, style } = props;
 	return (
 		<svg
 			version="1.1"
@@ -7,6 +9,7 @@ export function WisteriaLoom(props: { className?: string }) {
 			width="1024"
 			height="824"
 			className={className}
+			style={style}
 		>
 			<path
 				d="M0 0 C337.92 0 675.84 0 1024 0 C1024 271.92 1024 543.84 1024 824 C686.08 824 348.16 824 0 824 C0 552.08 0 280.16 0 0 Z "
