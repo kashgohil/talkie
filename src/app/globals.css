@@ -124,7 +124,7 @@
 
 	--destructive: oklch(0.577 0.245 27.325);
 	--border: oklch(0.92 0.004 286.32);
-	--input: oklch(0.92 0.004 286.32);
+	--input: var(--color-wisteria-200);
 	--ring: var(--color-wisteria-400);
 	--outline: var(--color-wisteria-400);
 
