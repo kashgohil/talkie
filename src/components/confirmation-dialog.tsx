@@ -11,6 +11,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useState } from "react";
 
 export function ConfirmationDialog({
 	children,
@@ -23,9 +24,14 @@ export function ConfirmationDialog({
 	onAction?: () => void;
 	onCancel?: () => void;
 }) {
+	const [isOpen, setIsOpen] = useState(false);
 	const { title, description, action, cancel, onAction, onCancel, ...rest } = props;
 	return (
-		<AlertDialog {...rest}>
+		<AlertDialog
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			{...rest}
+		>
 			<AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>
@@ -36,13 +42,16 @@ export function ConfirmationDialog({
 					<AlertDialogCancel
 						onClick={() => {
 							onCancel?.();
+							setIsOpen(false);
 						}}
 					>
 						{cancel}
 					</AlertDialogCancel>
 					<AlertDialogAction
+						className="!bg-accent hover:!bg-accent/80 text-accent-foreground"
 						onClick={() => {
 							onAction?.();
+							setIsOpen(false);
 						}}
 					>
 						{action}
