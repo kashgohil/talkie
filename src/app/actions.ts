@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { projects } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { desc, eq, InferInsertModel } from "drizzle-orm";
+import { and, desc, eq, InferInsertModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -78,5 +78,26 @@ export async function addProject(prevState: State, formData: FormData): Promise<
 	} catch (error) {
 		console.error("Error creating project:", error);
 		return { error: "Failed to create project", success: null, project: null, input: validatedFields.data };
+	}
+}
+
+export async function deleteProject(projectId: string): Promise<State> {
+	try {
+		const { userId } = await auth();
+		if (!userId) {
+			return { error: "Unauthorized", success: null, project: null, input: undefined };
+		}
+
+		const [project] = await db
+			.delete(projects)
+			.where(and(eq(projects.id, projectId), eq(projects.userId, userId)))
+			.returning();
+
+		revalidatePath("/");
+
+		return { success: "Project deleted successfully", project, error: null, input: undefined };
+	} catch (error) {
+		console.error("Error deleting project:", error);
+		return { error: "Failed to delete project", success: null, project: null, input: undefined };
 	}
 }
