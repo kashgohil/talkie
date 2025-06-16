@@ -1,4 +1,4 @@
-import { Edit, Folder, Trash2 } from "lucide-react";
+import { Edit, Folder } from "lucide-react";
 
 import { getUserProjects } from "@/app/actions";
 import {
@@ -9,6 +9,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { AddProject } from "./add-project";
+import { DeleteProjectButton } from "./deleteProject";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -36,7 +37,7 @@ async function ProjectsList() {
 									<span className="truncate">{item.name}</span>
 								</div>
 							</a>
-							<div className="items-center absolute z-10 -right-full group-hover/menu-item:right-0 bg-wisteria-200 p-1 shadow-2xl transition-all duration-300 rounded-lg group-hover/menu-item:flex delay-300">
+							<div className="items-center absolute z-10 -right-full group-hover/menu-item:right-0 bg-wisteria-200 p-1 shadow-2xl transition-all duration-300 rounded-lg group-hover/menu-item:flex">
 								<Tooltip>
 									<TooltipTrigger asChild>
 										<Button
@@ -54,23 +55,7 @@ async function ProjectsList() {
 										<span className="sr-only">Edit</span>
 									</TooltipContent>
 								</Tooltip>
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<Button
-											variant="ghost"
-											size="icon"
-										>
-											<Trash2
-												size={12}
-												className="text-wisteria-500 group-hover/menu-item:text-accent-foreground"
-											/>
-										</Button>
-									</TooltipTrigger>
-									<TooltipContent>
-										<span>Delete</span>
-										<span className="sr-only">Delete</span>
-									</TooltipContent>
-								</Tooltip>
+								<DeleteProjectButton projectId={item.id} />
 							</div>
 						</div>
 					</SidebarMenuButton>
