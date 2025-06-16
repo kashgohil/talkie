@@ -15,12 +15,12 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { toast } from "./ui/sonner";
 import { Textarea } from "./ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type Project = InferInsertModel<typeof projects>;
 type State = {
@@ -72,15 +72,23 @@ export function AddProject() {
 				open={isOpen}
 				onOpenChange={setIsOpen}
 			>
-				<DialogTrigger asChild>
-					<Button
-						size="icon"
-						variant="ghost"
-						className="!p-0.5"
-					>
-						<Plus />
-					</Button>
-				</DialogTrigger>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button
+							size="icon"
+							variant="ghost"
+							className="!p-1"
+							onClick={() => setIsOpen(true)}
+						>
+							<Plus />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>
+						<span>Add Project</span>
+						<span className="sr-only">Add Project</span>
+					</TooltipContent>
+				</Tooltip>
+
 				<DialogContent>
 					<form
 						action={formAction}
@@ -128,6 +136,7 @@ export function AddProject() {
 								<Button
 									type="button"
 									interactive
+									variant="secondary"
 								>
 									Cancel
 								</Button>
