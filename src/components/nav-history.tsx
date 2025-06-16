@@ -28,7 +28,7 @@ export function NavHistory() {
 							>
 								<span>Recent Conversation from our chat history, are you okay with that?</span>
 							</a>
-							<div className="items-center absolute z-10 -right-full group-hover/menu-item:right-0 bg-wisteria-200 p-1 shadow-2xl transition-all duration-300 rounded-lg group-hover/menu-item:flex delay-300">
+							<div className="items-center absolute z-10 -right-full group-hover/menu-item:right-0 bg-wisteria-200 p-1 shadow-2xl transition-all duration-300 rounded-lg group-hover/menu-item:flex">
 								<Tooltip>
 									<TooltipTrigger asChild>
 										<Button
