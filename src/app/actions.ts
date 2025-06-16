@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { projects } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { and, desc, eq, InferInsertModel } from "drizzle-orm";
+import { and, desc, eq, InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -14,7 +14,7 @@ const addProjectSchema = z.object({
 	systemPrompt: z.string().min(1, { message: "System prompt is required" }),
 });
 
-type Project = InferInsertModel<typeof projects>;
+type Project = InferSelectModel<typeof projects>;
 type State = {
 	error: string | { name?: string[]; description?: string[]; systemPrompt?: string[] } | null;
 	success: string | null;
