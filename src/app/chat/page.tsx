@@ -14,7 +14,7 @@ export default function Home() {
 			<div className="flex">
 				<div className="p-4 border border-wisteria-500 rounded-lg w-full lg:max-w-1/2 sm:max-w-full mx-auto relative bg-accent/10 backdrop-blur-sm">
 					<Textarea
-						className="border-none outline-none focus-within:outline-none resize-none h-11 !p-0"
+						className="border-none outline-none focus-within:outline-none resize-none h-11 !p-0 !ring-0"
 						placeholder="Type your message here..."
 						id="message"
 					/>
