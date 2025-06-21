@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { projects } from "@/db/schema";
+import { chats, projects } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { and, desc, eq, InferSelectModel } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -15,12 +15,19 @@ const addProjectSchema = z.object({
 });
 
 type Project = InferSelectModel<typeof projects>;
-type State = {
+type Chat = InferSelectModel<typeof chats>;
+type State<T> = {
 	error: string | { name?: string[]; description?: string[]; systemPrompt?: string[] } | null;
 	success: string | null;
-	project: Project | null;
+	data: T | null;
 	input: z.infer<typeof addProjectSchema> | undefined;
 };
+
+// Helper function to revalidate chat-related paths
+function revalidateChatPaths() {
+	revalidatePath("/");
+	revalidatePath("/chat");
+}
 
 export async function getUserProjects(): Promise<Project[]> {
 	const { userId } = await auth();
@@ -34,7 +41,31 @@ export async function getUserProjects(): Promise<Project[]> {
 	return userProjects;
 }
 
-export async function addProject(prevState: State, formData: FormData): Promise<State> {
+export async function getUserChats(): Promise<Chat[]> {
+	const { userId } = await auth();
+	if (!userId) {
+		return [];
+	}
+	const userChats = await db.query.chats.findMany({
+		where: eq(chats.userId, userId),
+		orderBy: [desc(chats.createdAt)],
+	});
+	return userChats;
+}
+
+export async function getUserProject(projectId: string): Promise<Project | undefined> {
+	const { userId } = await auth();
+	if (!userId) {
+		return undefined;
+	}
+
+	const userProject = await db.query.projects.findFirst({
+		where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
+	});
+	return userProject;
+}
+
+export async function addProject(prevState: State<Project>, formData: FormData): Promise<State<Project>> {
 	const validatedFields = addProjectSchema.safeParse({
 		name: formData.get("name"),
 		description: formData.get("description"),
@@ -44,14 +75,14 @@ export async function addProject(prevState: State, formData: FormData): Promise<
 	try {
 		const { userId } = await auth();
 		if (!userId) {
-			return { error: "Unauthorized", success: null, project: null, input: validatedFields.data };
+			return { error: "Unauthorized", success: null, data: null, input: validatedFields.data };
 		}
 
 		if (!validatedFields.success) {
 			return {
 				error: validatedFields.error.flatten().fieldErrors,
 				success: null,
-				project: null,
+				data: null,
 				input: validatedFields.data,
 			};
 		}
@@ -74,18 +105,18 @@ export async function addProject(prevState: State, formData: FormData): Promise<
 
 		revalidatePath("/");
 
-		return { success: "Project created successfully", project, error: null, input: undefined };
+		return { success: "Project created successfully", data: project, error: null, input: undefined };
 	} catch (error) {
 		console.error("Error creating project:", error);
-		return { error: "Failed to create project", success: null, project: null, input: validatedFields.data };
+		return { error: "Failed to create project", success: null, data: null, input: validatedFields.data };
 	}
 }
 
-export async function deleteProject(projectId: string): Promise<State> {
+export async function deleteProject(projectId: string): Promise<State<Project>> {
 	try {
 		const { userId } = await auth();
 		if (!userId) {
-			return { error: "Unauthorized", success: null, project: null, input: undefined };
+			return { error: "Unauthorized", success: null, data: null, input: undefined };
 		}
 
 		const [project] = await db
@@ -95,9 +126,30 @@ export async function deleteProject(projectId: string): Promise<State> {
 
 		revalidatePath("/");
 
-		return { success: "Project deleted successfully", project, error: null, input: undefined };
+		return { success: "Project deleted successfully", data: project, error: null, input: undefined };
 	} catch (error) {
 		console.error("Error deleting project:", error);
-		return { error: "Failed to delete project", success: null, project: null, input: undefined };
+		return { error: "Failed to delete project", success: null, data: null, input: undefined };
+	}
+}
+
+export async function deleteChat(chatId: string): Promise<State<Chat>> {
+	try {
+		const { userId } = await auth();
+		if (!userId) {
+			return { error: "Unauthorized", success: null, data: null, input: undefined };
+		}
+
+		const [chat] = await db
+			.delete(chats)
+			.where(and(eq(chats.id, chatId), eq(chats.userId, userId)))
+			.returning();
+
+		revalidateChatPaths();
+
+		return { success: "Chat deleted successfully", data: chat, error: null, input: undefined };
+	} catch (error) {
+		console.error("Error deleting chat:", error);
+		return { error: "Failed to delete chat", success: null, data: null, input: undefined };
 	}
 }
