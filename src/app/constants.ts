@@ -1,5 +1,20 @@
 export const models = [
 	{
+		id: "meta-llama/llama-3.3-8b-instruct:free",
+		name: "Llama 3.3 8B Instruct",
+		provider: "meta",
+	},
+	{
+		id: "google/gemini-2.5-flash-lite-preview-06-17",
+		name: "Gemini 2.5 Flash Lite Preview 06-17",
+		provider: "google",
+	},
+	{
+		id: "moonshotai/kimi-dev-72b:free",
+		name: "Kimi Dev 72B",
+		provider: "moonshotai",
+	},
+	{
 		id: "gpt-4o",
 		name: "GPT-4o",
 		provider: "openai",
