@@ -30,16 +30,12 @@ export function toast(toast: Omit<ToastProps, "id">) {
 			title={toast.title}
 			description={toast.description}
 			type={toast.type}
-			button={{
-				label: toast.button.label,
-				onClick: () => sonnerToast.dismiss(id),
-			}}
 		/>
 	));
 }
 
 function Toast(props: ToastProps) {
-	const { title, description, button, id, type } = props;
+	const { title, description, type } = props;
 
 	return (
 		<div className="flex rounded-lg bg-white shadow-lg ring-1 ring-black/5 w-full md:max-w-[364px] items-center p-4">
@@ -56,22 +52,7 @@ function Toast(props: ToastProps) {
 						? "text-wisteria-500 hover:text-wisteria-600 focus:ring-wisteria-500"
 						: "text-red-500 hover:text-red-600 focus:ring-red-500"
 				)}
-			>
-				<button
-					className={cn(
-						"rounded px-3 py-1 text-sm font-semibold",
-						type === "success"
-							? "bg-wisteria-50 text-wisteria-600 hover:bg-wisteria-100"
-							: "bg-red-50 text-red-600 hover:bg-red-100"
-					)}
-					onClick={() => {
-						button.onClick();
-						sonnerToast.dismiss(id);
-					}}
-				>
-					{button.label}
-				</button>
-			</div>
+			></div>
 		</div>
 	);
 }
@@ -81,10 +62,6 @@ interface ToastProps {
 	title: string;
 	description: string;
 	type: "success" | "error";
-	button: {
-		label: string;
-		onClick: () => void;
-	};
 }
 
 export { Toaster };
