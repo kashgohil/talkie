@@ -6,8 +6,12 @@ import { NavProjects } from "@/components/nav-projects";
 import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
+import Link from "next/link";
 
-export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({
+	projects,
+	...props
+}: React.ComponentProps<typeof Sidebar> & { projects?: boolean }) {
 	return (
 		<Sidebar
 			variant="inset"
@@ -17,21 +21,21 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<a
-							href="#"
+						<Link
+							href="/chat"
 							className="flex items-center gap-2 p-2 text-wisteria-500"
 						>
 							<Flower className="!h-6 !w-6" />
 							<div className="grid flex-1 text-left text-sm leading-tight">
 								<span className="truncate font-medium text-xl">Wisteria</span>
 							</div>
-						</a>
+						</Link>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
 				<NavProjects />
-				<NavHistory />
+				{!projects && <NavHistory />}
 				<NavSecondary className="mt-auto" />
 				<NavUser />
 			</SidebarContent>
