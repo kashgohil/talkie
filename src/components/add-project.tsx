@@ -2,7 +2,7 @@
 
 import { addProject } from "@/app/actions";
 import { projects } from "@/db/schema";
-import { InferInsertModel } from "drizzle-orm";
+import { InferSelectModel } from "drizzle-orm";
 import { Plus } from "lucide-react";
 import React, { useActionState } from "react";
 
@@ -22,11 +22,11 @@ import { toast } from "./ui/sonner";
 import { Textarea } from "./ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-type Project = InferInsertModel<typeof projects>;
+type Project = InferSelectModel<typeof projects>;
 type State = {
 	error: string | { name?: string[]; description?: string[]; systemPrompt?: string[] } | null;
 	success: string | null;
-	project: Project | null;
+	data: Project | null;
 	input: { name: string; description: string; systemPrompt: string } | undefined;
 };
 
@@ -34,7 +34,7 @@ export function AddProject() {
 	const [state, formAction, isPending] = useActionState<State, FormData>(addProject, {
 		error: null,
 		success: null,
-		project: null,
+		data: null,
 		input: undefined,
 	});
 
@@ -45,10 +45,6 @@ export function AddProject() {
 			toast({
 				title: "Project created successfully",
 				description: "You can now start chatting with your project.",
-				button: {
-					label: "Close",
-					onClick: () => setIsOpen(false),
-				},
 				type: "success",
 			});
 			setIsOpen(false);
@@ -57,10 +53,6 @@ export function AddProject() {
 			toast({
 				title: "Failed to create project",
 				description: "Please try again.",
-				button: {
-					label: "Close",
-					onClick: () => setIsOpen(false),
-				},
 				type: "error",
 			});
 		}
