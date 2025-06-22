@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { chats, projects } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { and, desc, eq, InferSelectModel } from "drizzle-orm";
+import { and, desc, eq, InferSelectModel, isNull } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -41,7 +41,7 @@ export async function getUserChats(): Promise<Chat[]> {
 		return [];
 	}
 	const userChats = await db.query.chats.findMany({
-		where: eq(chats.userId, userId),
+		where: and(eq(chats.userId, userId), isNull(chats.projectId)),
 		orderBy: [desc(chats.createdAt)],
 	});
 	return userChats;
@@ -57,6 +57,13 @@ export async function getUserProject(projectId: string): Promise<Project | undef
 		where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
 	});
 	return userProject;
+}
+
+export async function getProjectChats(projectId: string): Promise<Chat[]> {
+	const projectChats = await db.query.chats.findMany({
+		where: eq(chats.projectId, projectId),
+	});
+	return projectChats;
 }
 
 export async function addProject(prevState: State<Project>, formData: FormData): Promise<State<Project>> {
