@@ -17,8 +17,8 @@ export default function ChatLayout({
 	return (
 		<SidebarProvider className="h-screen">
 			<AppSidebar />
-			<SidebarInset>
-				<SidebarTrigger className="-ml-1 absolute top-4 left-4" />
+			<SidebarInset className="relative">
+				<SidebarTrigger className="-ml-1 absolute top-4 left-4 z-20" />
 				{children}
 			</SidebarInset>
 		</SidebarProvider>
