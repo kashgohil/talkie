@@ -22,11 +22,11 @@ export const chats = s.sqliteTable("chats", {
 
 export const messages = s.sqliteTable("messages", {
 	id: s.text("id").primaryKey(),
-	chatId: s.text("chat_id").references(() => chats.id),
+	chatId: s.text("chat_id").references(() => chats.id, { onDelete: "cascade" }),
 	createdAt: s.integer("created_at", { mode: "timestamp" }),
 	updatedAt: s.integer("updated_at", { mode: "timestamp" }),
 	userId: s.text("user_id").notNull(),
-	message: s.text("message").notNull(),
+	content: s.text("content").notNull(),
 	model: s.text("model").notNull(),
 	role: s.text("role").notNull(),
 	response: s.text("response"),
