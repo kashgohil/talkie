@@ -23,12 +23,6 @@ type State<T> = {
 	input: z.infer<typeof addProjectSchema> | undefined;
 };
 
-// Helper function to revalidate chat-related paths
-function revalidateChatPaths() {
-	revalidatePath("/");
-	revalidatePath("/chat");
-}
-
 export async function getUserProjects(): Promise<Project[]> {
 	const { userId } = await auth();
 	if (!userId) {
@@ -145,11 +139,31 @@ export async function deleteChat(chatId: string): Promise<State<Chat>> {
 			.where(and(eq(chats.id, chatId), eq(chats.userId, userId)))
 			.returning();
 
-		revalidateChatPaths();
+		revalidatePath("/");
 
 		return { success: "Chat deleted successfully", data: chat, error: null, input: undefined };
 	} catch (error) {
 		console.error("Error deleting chat:", error);
 		return { error: "Failed to delete chat", success: null, data: null, input: undefined };
+	}
+}
+
+export async function moveChat(chatId: string, projectId: string): Promise<State<Chat>> {
+	try {
+		const { userId } = await auth();
+		if (!userId) {
+			return { error: "Unauthorized", success: null, data: null, input: undefined };
+		}
+
+		const [chat] = await db
+			.update(chats)
+			.set({ projectId })
+			.where(and(eq(chats.id, chatId), eq(chats.userId, userId)))
+			.returning();
+
+		return { success: "Chat moved successfully", data: chat, error: null, input: undefined };
+	} catch (error) {
+		console.error("Error moving chat:", error);
+		return { error: "Failed to move chat", success: null, data: null, input: undefined };
 	}
 }
