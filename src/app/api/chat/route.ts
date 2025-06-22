@@ -3,6 +3,7 @@ import { chats as chatsTable, messages as messagesTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { generateText, streamText } from "ai";
+import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 
 const openRouter = createOpenRouter({
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
 			const newChat = await db
 				.insert(chatsTable)
 				.values({
-					id: crypto.randomUUID(),
+					id: nanoid(10),
 					userId,
 					projectId,
 					name: result.text,
@@ -59,9 +60,9 @@ export async function POST(req: Request) {
 			.values({
 				chatId,
 				userId,
-				id: crypto.randomUUID(),
+				id: nanoid(10),
 				role: "user",
-				message: messages[0].content,
+				content: messages[0].content,
 				model,
 			})
 			.then(() => {
@@ -77,9 +78,9 @@ export async function POST(req: Request) {
 				await db.insert(messagesTable).values({
 					chatId,
 					userId,
-					id: crypto.randomUUID(),
+					id: nanoid(10),
 					role: "assistant",
-					message: message.text,
+					content: message.text,
 					model: model,
 					response: message.text,
 					responseTokens: message.usage?.completionTokens,
