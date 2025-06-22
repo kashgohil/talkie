@@ -20,7 +20,7 @@ export async function NavHistory() {
 	return (
 		<SidebarGroup className="group-data-[collapsible=icon]:hidden">
 			<SidebarGroupLabel className="text-wisteria-500 flex items-center gap-2 justify-between">
-				<span>Chats</span>
+				<span>Open chats</span>
 				<Link href="/chat">
 					<Tooltip>
 						<TooltipTrigger asChild>

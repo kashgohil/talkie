@@ -1,4 +1,4 @@
-import { LifeBuoy, Send } from "lucide-react";
+import { LifeBuoy } from "lucide-react";
 import * as React from "react";
 
 import {
@@ -12,14 +12,14 @@ import {
 const items = [
 	{
 		title: "Support",
-		url: "#",
+		url: "mailto:t@t.com",
 		icon: LifeBuoy,
 	},
-	{
-		title: "Feedback",
-		url: "#",
-		icon: Send,
-	},
+	// {
+	// 	title: "Feedback",
+	// 	url: "#",
+	// 	icon: Send,
+	// },
 ];
 
 export function NavSecondary({ ...props }: {} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
